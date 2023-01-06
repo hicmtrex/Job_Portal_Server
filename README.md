@@ -40,6 +40,7 @@
     <li><a href="https://angular.io/">Nestjs</a></li>
     <li><a href="https://material.angular.io/">Prisma</a></li>
     <li><a href="https://rxjs.dev/">Postgresql</a></li>
+    <li><a href="https://rxjs.dev/">Jwt</a></li>
   </ul>
 </details>
 
