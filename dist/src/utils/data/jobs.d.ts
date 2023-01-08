@@ -1,0 +1,31 @@
+export declare const jobs: ({
+    title: string;
+    companyName: string;
+    email: string;
+    website: string;
+    category: string;
+    Salary: number;
+    location: string;
+    'Job nature': string;
+    applicationDate: string;
+    image: string;
+    description: string;
+    createdAt: string;
+    requiredKnowledge: string[];
+    experience: string[];
+} | {
+    title: string;
+    companyName: string;
+    email: string;
+    website: string;
+    Salary: number;
+    location: string;
+    'Job nature': string;
+    applicationDate: string;
+    image: string;
+    description: string;
+    createdAt: string;
+    requiredKnowledge: string[];
+    experience: string[];
+    category?: undefined;
+})[];
