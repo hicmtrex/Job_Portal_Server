@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  nest-api:
+    container_name: jobs-ports-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 5000:5000
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+# file you using postgres
+  postgres:
+    image: postgres:13
+    container_name: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    env_file:
+      - .env
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+volumes:
+  postgres:
+    name: hicm_prisma_user

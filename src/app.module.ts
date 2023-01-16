@@ -11,6 +11,7 @@ import { ApplyModule } from './apply/apply.module';
 import { AppController } from './app.controller';
 import { RecruiterMiddleware } from './middlewares/recuiter.middleware';
 import { AdminMiddleware } from './middlewares/admin.middleware';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { AdminMiddleware } from './middlewares/admin.middleware';
     PrismaModule,
     JwtModule,
     ApplyModule,
+    ConfigModule.forRoot(),
   ],
 
   controllers: [AppController],

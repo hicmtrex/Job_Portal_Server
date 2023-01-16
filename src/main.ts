@@ -15,6 +15,6 @@ async function bootstrap() {
   app.use('/', express.static(process.cwd() + '\\uploads'));
 
   app.use(cookieParser());
-  await app.listen(5000);
+  await app.listen(parseInt(process.env.PORT) || 5000);
 }
 bootstrap();
