@@ -66,10 +66,22 @@
 
 ### :bangbang: Prerequisites
 
-This project uses Yarn as package manager
+Go to the project directory
 
 ```bash
- npm install --global yarn
+  cd my-project
+```
+
+Install dependencies
+
+```bash
+  npm install
+```
+
+Start the Server
+
+```bash
+  npm run dev
 ```
 
 <!-- Installation -->
@@ -101,30 +113,6 @@ Clone the project
 
 ```bash
   git clone https://github.com/hicmtrex/Mean_Shop_Frontend
-```
-
-Go to the project directory
-
-```bash
-  cd my-project
-```
-
-Install dependencies
-
-```bash
-  npm install
-```
-
-Start the Admin Project
-
-```bash
-  npm run admin
-```
-
-Start the User Project
-
-```bash
-  npm run user
 ```
 
 <!-- License -->
