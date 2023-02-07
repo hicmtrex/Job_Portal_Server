@@ -1,5 +1,4 @@
 import { Controller, Get, Post, Body, Res, Req } from '@nestjs/common';
-import { SkipThrottle } from '@nestjs/throttler';
 import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { LoginAuthDto } from './dto/login-auth.dto';
@@ -19,7 +18,6 @@ export class AuthController {
     return this.authService.login(userData, res);
   }
 
-  @SkipThrottle()
   @Get('refresh')
   refreshToken(@Req() req: Request, @Res() res: Response) {
     return this.authService.refreshToken(req, res);

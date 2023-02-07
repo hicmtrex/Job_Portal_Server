@@ -49,60 +49,45 @@ export class JobsService {
   ) {
     const pageSize = 9;
 
-    const allJobs = await this.prisma.job.findMany({});
-
-    let jobs;
-    let jobCount;
-
+    // Construct the `where` clause for the Prisma query based on the provided parameters
+    const where: {
+      title: { contains: string };
+      OR?: { [key: string]: { equals: string } }[];
+    } = {
+      title: { contains: search },
+    };
     if (category || location || jobNature) {
-      jobCount = await this.prisma.job.count({
-        where: {
-          title: { contains: search },
-          OR: [
-            { jobNature: { equals: jobNature } },
-            { category: { equals: category } },
-            { location: { equals: location } },
-          ],
-        },
-      });
-
-      jobs = await this.prisma.job.findMany({
-        skip: pageSize * (page - 1),
-        take: pageSize,
-        where: {
-          title: { contains: search },
-          OR: [
-            { jobNature: { equals: jobNature } },
-            { category: { equals: category } },
-            { location: { equals: location } },
-          ],
-        },
-      });
-    } else {
-      jobCount = await this.prisma.job.count({
-        where: {
-          title: { contains: search },
-        },
-      });
-
-      jobs = await this.prisma.job.findMany({
-        skip: pageSize * (page - 1),
-        take: pageSize,
-        where: {
-          title: { contains: search },
-        },
-      });
+      where.OR = [
+        { jobNature: { equals: jobNature } },
+        { category: { equals: category } },
+        { location: { equals: location } },
+      ].filter(Boolean);
     }
 
-    const categories: string[] = [];
-    const locations: string[] = [];
-    const jobNatures: string[] = [];
+    // Use `Promise.all` to run multiple Prisma queries in parallel
+    const [jobs, jobCount] = await Promise.all([
+      this.prisma.job.findMany({
+        skip: pageSize * (page - 1),
+        take: pageSize,
+        where,
+      }),
+      this.prisma.job.count({ where }),
+    ]);
 
-    allJobs.forEach((job) => {
-      if (!categories.includes(job.category)) categories.push(job.category);
-      if (!locations.includes(job.location)) locations.push(job.location);
-      if (!jobNatures.includes(job.jobNature)) jobNatures.push(job.jobNature);
-    });
+    // Fetch all jobs to determine the unique values for each field
+    const allJobs = await this.prisma.job.findMany({});
+
+    // Helper function to get the unique values for a specific field
+    const getUniqueValues = (key: string) =>
+      allJobs.reduce((acc, job) => {
+        acc[job[key]] = true;
+        return acc;
+      }, {});
+
+    // Get the unique values for each field
+    const categories = Object.keys(getUniqueValues('category'));
+    const locations = Object.keys(getUniqueValues('location'));
+    const jobNatures = Object.keys(getUniqueValues('jobNature'));
 
     return {
       jobs,
@@ -114,6 +99,7 @@ export class JobsService {
       pages: Math.ceil(jobCount / pageSize),
     };
   }
+
   async findAllRecruiterJobs(req: RequestWithUser) {
     const recruiterJobs = await this.prisma.job.findMany({
       where: { userId: req.user.id },
